@@ -1,0 +1,12 @@
+body {
+  padding: 60px 0;
+  background: #ffffff;
+}
+
+.error{
+    background-color: red;
+    padding: 0.5%;
+    color: white;
+    font-size: 0.8em;
+    border-radius: 5px;
+}

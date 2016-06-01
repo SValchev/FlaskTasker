@@ -1,0 +1,130 @@
+{% extends "_base.html" %}
+{% block content %}
+
+
+<h1>Welcome to FlaskTaskr</h1>
+<div class="add-task">
+    <h3>Add a new task:</h3>
+    <form action="{{ url_for('tasks.add') }}" method="POST">
+        {{ form.csrf_token }}
+        <p>
+            {{ form.name(placeholder="Task name") }}
+            {% if form.name.errors %}
+              <span class="error">
+                  {% for error in form.name.errors %}
+                    {{ error }}
+                  {% endfor %}
+              </span>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.due_date(placeholder="Due date", title="mm/dd/yyyy", pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}") }}
+            {% if form.due_date.errors %}
+      <span class="error">
+          {% for error in form.due_date.errors %}
+            {{ error }}
+          {% endfor %}
+      </span>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.prioraty.label }}
+            {{ form.prioraty }}
+            {% if form.prioraty.errors %}
+              <span class="error">
+                  {% for error in form.prioraty.errors %}
+                    {{ error }}
+                  {% endfor %}
+              </span>
+            {% endif %}
+        </p>
+        <input class="btn btn-default" type="submit" value="Submit">
+    </form>
+</div>
+
+<br><br><br><br>
+
+<!--Navigation bar with closed and open tasks-->
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home"><strong>Open tasks</strong></a></li>
+        <li><a data-toggle="tab" href="#menu1"><strong>Closed tasks</strong></a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            <div class="entries-stripped">
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th><strong>Task Name</strong></th>
+                            <th><strong>Due Date</strong></th>
+                            <th><strong>Posted Date</strong></th>
+                            <th><strong>Priority</strong></th>
+                            <th><strong>Posted By</strong></th>
+                            <th><strong>Actions</strong></th>
+                        </tr>
+                        </thead>
+                        {% for task in open_tasks %}
+                        <tr>
+                            <td>{{ task.name }}</td>
+                            <td>{{ task.due_date }}</td>
+                            <td>{{ task.poste_date }}</td>
+                            <td>{{ task.prioraty }}</td>
+                            <td>{{ task.poster.username }}</td>
+                            <td>
+                                <a href="{{ url_for('tasks.complete', current_task_id = task.task_id) }}">
+                                    <button type="button" class="btn btn-primary btn-xs">Mark Complete</button>
+                                </a>
+                                <a href="{{ url_for('tasks.delete', current_task_id = task.task_id) }}">
+                                    <button type="button" class="btn btn-primary btn-xs">Delete</button>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <div class="entries">
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th><strong>Task Name</strong></th>
+                            <th><strong>Due Date</strong></th>
+                            <th><strong>Posted Date</strong></th>
+                            <th><strong>Priority</strong></th>
+                            <th><strong>Posted By</strong></th>
+                            <th><strong>Actions</strong></th>
+                        </tr>
+                        </thead>
+                        {% for task in closed_tasks %}
+                        <tr>
+                            <td>{{ task.name }}</td>
+                            <td>{{ task.due_date }}</td>
+                            <td>{{ task.poste_date }}</td>
+                            <td>{{ task.prioraty }}</td>
+                            <td>{{ task.poster.username }}</td>
+                            <td>
+                                <a href="{{ url_for('tasks.delete', current_task_id = task.task_id) }}">
+                                    <button type="button" class="btn btn-primary btn-xs">Delete</button>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
